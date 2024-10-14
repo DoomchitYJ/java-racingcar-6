@@ -1,6 +1,8 @@
 package view;
 
 import javax.xml.validation.Validator;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static camp.nextstep.edu.missionutils.Console.readLine;
@@ -12,11 +14,27 @@ public class InputView {
 
     public static List<String> getCarNames() {
         System.out.println(CAR_NAMES_INPUT);
-        return List.of(readLine().trim().split(NAME_SEPARATOR));
+        return validateDuplicated(readLine().trim().split(NAME_SEPARATOR));
     }
 
     public static int getTimes() {
         System.out.println(TIMES_INPUT);
         return Integer.parseInt(readLine().trim());
+    }
+
+    private static List<String> validateDuplicated(String[] items) {
+        List<String> cars = new ArrayList<>(Arrays.asList(items));
+        if(hasDuplicated(cars)) {
+            throw new IllegalArgumentException();
+        }
+        return cars;
+    }
+
+    private static boolean hasDuplicated(List<String> items) {
+        return items.size() != isAllUnique(items);
+    }
+
+    private static int isAllUnique(List<String> items) {
+        return (int) items.stream().distinct().count();
     }
 }
